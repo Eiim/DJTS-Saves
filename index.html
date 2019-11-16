@@ -1,0 +1,136 @@
+<html>
+<head>
+	<title>DJTS Save Analyzer</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<style>
+	#main {
+		max-width: 400px;
+		margin: auto;
+	}
+	h2 {
+		text-align: center; 
+	}
+	th {
+		background-color:#ccc;
+	}
+	table {
+  	border-collapse: collapse;
+  	margin: 0 auto;
+	}
+	table,td,th {
+		border: 1px solid black; 
+	}
+	</style>
+	<script>
+	function parseFile() {
+		var reader = new FileReader();
+		reader.readAsArrayBuffer(document.getElementById("save-input").files[0]);
+		reader.onloadend = function() {
+			var arr = new Uint8Array(reader.result, 0, 235);
+			console.log(arr);
+		}
+	}
+	</script>
+</head>
+<body>
+<div id="main">
+	<h2>DJTS Save Analyzer</h2>
+	<p>Choose save file: <input id="save-input" type="file" accept=".SAV, .dsv" oninput="parseFile()"/></p>
+	<table style="width:100%">
+		<tr>
+			<th colspan=2>Metadata ▴</th>
+		</tr>
+		<tr>
+			<td>Header</td>
+			<td>85EC93370C</td>
+		</tr>
+		<tr>
+			<td>Levels started</td>
+			<td>1,2,3</td>
+		</tr>
+		<tr>
+			<td>Settings menu opened?</td>
+			<td>no</td>
+		</tr>
+		<tr>
+			<th colspan=2>Global ▴</th>
+		</tr>
+		<tr>
+			<td>Joshakazam levels completed</td>
+			<td>80</td>
+		</tr>
+		<tr>
+			<td>Joshakazam upgrades</td>
+			<td>12</td>
+		</tr>
+		<tr>
+			<td>Handedness</td>
+			<td>Right</td>
+		</tr>
+		<tr>
+			<td>Language</td>
+			<td>English</td>
+		</tr>
+		<tr>
+			<td>Music level</td>
+			<td>Medium</td>
+		</tr>
+		<tr>
+			<td>SFX level</td>
+			<td>Medium</td>
+		</tr>
+		<tr>
+			<td>Guitar 1 normal high score</td>
+			<td>100000</td>
+		</tr>
+		<tr>
+			<td>Guitar 1 hard high score</td>
+			<td>100000</td>
+		</tr>
+		<tr>
+			<td>Guitar 2 normal high score</td>
+			<td>100000</td>
+		</tr>
+		<tr>
+			<td>Guitar 2 hard high score</td>
+			<td>100000</td>
+		</tr>
+		<tr>
+			<td>Guitar 3 normal high score</td>
+			<td>100000</td>
+		</tr>
+		<tr>
+			<td>Guitar 3 hard high score</td>
+			<td>100000</td>
+		</tr>
+		<tr>
+			<td>Guitar 4 normal high score</td>
+			<td>100000</td>
+		</tr>
+		<tr>
+			<td>Guitar 4 hard high score</td>
+			<td>100000</td>
+		</tr>
+		<tr>
+			<td>Guitar 5 normal high score</td>
+			<td>100000</td>
+		</tr>
+		<tr>
+			<td>Guitar 5 hard high score</td>
+			<td>100000</td>
+		</tr>
+		<tr>
+			<th colspan=2>Save 1 ▴</th>
+		</tr>
+		<tr>
+			<th colspan=2>Save 2 ▴</th>
+		</tr>
+		<tr>
+			<th colspan=2>Save 3 ▴</th>
+		</tr>
+	</table>
+	<p>Created by Ethan Chapman</p>
+	<p>Analysis by Ethan Chapman and Cameron McVay</p>
+</div>
+</body>
+</html>
