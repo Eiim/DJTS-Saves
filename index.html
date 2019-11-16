@@ -30,6 +30,17 @@
 			console.log(arr);
 		}
 	}
+	var coll = {"m":false,"g":false,"s1":false,"s2":false,"s3":false};
+	function collapse(group) {
+		console.log(coll[group] ? "▼" : "▲");
+		var elements = document.getElementsByClassName(group)
+		for(var i = 0; i < elements.length; i++) {
+			elements[i].style.display = coll[group] ? "" : "none";
+		}
+		var text = document.getElementById(group).textContent;
+		document.getElementById(group).textContent = text.substring(0,text.length-1)+(coll[group] ? "▼" : "▲");
+		coll[group] = !coll[group];
+	}
 	</script>
 </head>
 <body>
@@ -38,95 +49,235 @@
 	<p>Choose save file: <input id="save-input" type="file" accept=".SAV, .dsv" oninput="parseFile()"/></p>
 	<table style="width:100%">
 		<tr>
-			<th colspan=2>Metadata ▴</th>
+			<th colspan=2 onclick="collapse('m')" id="m">Metadata ▼</th>
 		</tr>
-		<tr>
+		<tr class="m">
 			<td>Header</td>
-			<td>85EC93370C</td>
+			<td id="header">85EC93370C</td>
 		</tr>
-		<tr>
-			<td>Levels started</td>
-			<td>1,2,3</td>
+		<tr class="m">
+			<td>Saves started</td>
+			<td id="started">1,2,3</td>
 		</tr>
-		<tr>
+		<tr class="m">
 			<td>Settings menu opened?</td>
-			<td>no</td>
+			<td id="settings">no</td>
+		</tr>
+		<tr class="m">
+			<td>Universal checksum</td>
+			<td id="ucheck">CF7B45F382201F2D</td>
+		</tr>
+		<tr class="m">
+			<td>Global checksum</td>
+			<td id="gcheck">9F231BD9</td>
+		</tr>
+		<tr class="m">
+			<td>Save 1 checksum</td>
+			<td id="1check">5ED1064C</td>
+		</tr>
+		<tr class="m">
+			<td>Save 2 checksum</td>
+			<td id="2check">5ED1064C</td>
+		</tr>
+		<tr class="m">
+			<td>Save 3 checksum</td>
+			<td id="3check">5ED1064C</td>
 		</tr>
 		<tr>
-			<th colspan=2>Global ▴</th>
+			<th colspan=2 onclick="collapse('g')" id="g">Global ▼</th>
 		</tr>
-		<tr>
+		<tr class="g">
 			<td>Joshakazam levels completed</td>
-			<td>80</td>
+			<td id="jklevels">80</td>
 		</tr>
-		<tr>
+		<tr class="g">
 			<td>Joshakazam upgrades</td>
-			<td>12</td>
+			<td id="jkupgrades">12</td>
 		</tr>
-		<tr>
+		<tr class="g">
 			<td>Handedness</td>
-			<td>Right</td>
+			<td id="hand">Right</td>
 		</tr>
-		<tr>
+		<tr class="g">
 			<td>Language</td>
-			<td>English</td>
+			<td id="lang">English</td>
 		</tr>
-		<tr>
+		<tr class="g">
 			<td>Music level</td>
-			<td>Medium</td>
+			<td id="music">Medium</td>
 		</tr>
-		<tr>
+		<tr class="g">
 			<td>SFX level</td>
-			<td>Medium</td>
+			<td id="sfx">Medium</td>
 		</tr>
-		<tr>
+		<tr class="g">
 			<td>Guitar 1 normal high score</td>
-			<td>100000</td>
+			<td id="g1n">100000</td>
 		</tr>
-		<tr>
+		<tr class="g">
 			<td>Guitar 1 hard high score</td>
-			<td>100000</td>
+			<td id="g1h">100000</td>
 		</tr>
-		<tr>
+		<tr class="g">
 			<td>Guitar 2 normal high score</td>
-			<td>100000</td>
+			<td id="g2n">100000</td>
 		</tr>
-		<tr>
+		<tr class="g">
 			<td>Guitar 2 hard high score</td>
-			<td>100000</td>
+			<td id="g2h">100000</td>
 		</tr>
-		<tr>
+		<tr class="g">
 			<td>Guitar 3 normal high score</td>
-			<td>100000</td>
+			<td id="g3n">100000</td>
 		</tr>
-		<tr>
+		<tr class="g">
 			<td>Guitar 3 hard high score</td>
-			<td>100000</td>
+			<td id="g3h">100000</td>
 		</tr>
-		<tr>
+		<tr class="g">
 			<td>Guitar 4 normal high score</td>
-			<td>100000</td>
+			<td id="g4n">100000</td>
 		</tr>
-		<tr>
+		<tr class="g">
 			<td>Guitar 4 hard high score</td>
-			<td>100000</td>
+			<td id="g4h">100000</td>
 		</tr>
-		<tr>
+		<tr class="g">
 			<td>Guitar 5 normal high score</td>
-			<td>100000</td>
+			<td id="g5n">100000</td>
 		</tr>
-		<tr>
+		<tr class="g">
 			<td>Guitar 5 hard high score</td>
-			<td>100000</td>
+			<td id="g5h">100000</td>
 		</tr>
 		<tr>
-			<th colspan=2>Save 1 ▴</th>
+			<th colspan=2 onclick="collapse('s1')" id="s1">Save 1 ▼</th>
+		</tr>
+		<tr class="s1">
+			<td>Save datetime</td>
+			<td id="s1time">16:05:12 4/20/2019</td>
+		</tr>
+		<tr class="s1">
+			<td>Level</td>
+			<td id="s1level">1-3</td>
+		</tr>
+		<tr class="s1">
+			<td>Trophies</td>
+			<td id="s1trophies">12</td>
+		</tr>
+		<tr class="s1">
+			<td>Action meter upgrades</td>
+			<td id="s1am">1</td>
+		</tr>
+		<tr class="s1">
+			<td>Guitar picks 1</td>
+			<td id="s1g1">5</td>
+		</tr>
+		<tr class="s1">
+			<td>Guitar picks 2</td>
+			<td id="s1g2">5</td>
+		</tr>
+		<tr class="s1">
+			<td>Guitar picks 3</td>
+			<td id="s1g3">5</td>
+		</tr>
+		<tr class="s1">
+			<td>Guitar picks 4</td>
+			<td id="s1g4">5</td>
+		</tr>
+		<tr class="s1">
+			<td>Guitar picks 5</td>
+			<td id="s1g5">5</td>
+		</tr>
+		<tr class="s1">
+			<td>Tutorials</td>
+			<td id="s1tuts">Coming soon?</td>
 		</tr>
 		<tr>
-			<th colspan=2>Save 2 ▴</th>
+			<th colspan=2 onclick="collapse('s2')" id="s2">Save 2 ▼</th>
+		</tr>
+		<tr class="s2">
+			<td>Save datetime</td>
+			<td id="s2time">16:05:12 4/20/2019</td>
+		</tr>
+		<tr class="s2">
+			<td>Level</td>
+			<td id="s2level">1-3</td>
+		</tr>
+		<tr class="s2">
+			<td>Trophies</td>
+			<td id="s2trophies">12</td>
+		</tr>
+		<tr class="s2">
+			<td>Action meter upgrades</td>
+			<td id="s2am">1</td>
+		</tr>
+		<tr class="s2">
+			<td>Guitar picks 1</td>
+			<td id="s2g1">5</td>
+		</tr>
+		<tr class="s2">
+			<td>Guitar picks 2</td>
+			<td id="s2g2">5</td>
+		</tr>
+		<tr class="s2">
+			<td>Guitar picks 3</td>
+			<td id="s2g3">5</td>
+		</tr>
+		<tr class="s2">
+			<td>Guitar picks 4</td>
+			<td id="s2g4">5</td>
+		</tr>
+		<tr class="s2">
+			<td>Guitar picks 5</td>
+			<td id="s2g5">5</td>
+		</tr>
+		<tr class="s2">
+			<td>Tutorials</td>
+			<td id="s2tuts">Coming soon?</td>
 		</tr>
 		<tr>
-			<th colspan=2>Save 3 ▴</th>
+			<th colspan=2 onclick="collapse('s3')" id="s3">Save 3 ▼</th>
+		</tr>
+		<tr class="s3">
+			<td>Save datetime</td>
+			<td id="s2time">16:05:12 4/20/2019</td>
+		</tr>
+		<tr class="s3">
+			<td>Level</td>
+			<td id="s2level">1-3</td>
+		</tr>
+		<tr class="s3">
+			<td>Trophies</td>
+			<td id="s2trophies">12</td>
+		</tr>
+		<tr class="s3">
+			<td>Action meter upgrades</td>
+			<td id="s2am">1</td>
+		</tr>
+		<tr class="s3">
+			<td>Guitar picks 1</td>
+			<td id="s2g1">5</td>
+		</tr>
+		<tr class="s3">
+			<td>Guitar picks 2</td>
+			<td id="s2g2">5</td>
+		</tr>
+		<tr class="s3">
+			<td>Guitar picks 3</td>
+			<td id="s2g3">5</td>
+		</tr>
+		<tr class="s3">
+			<td>Guitar picks 4</td>
+			<td id="s2g4">5</td>
+		</tr>
+		<tr class="s3">
+			<td>Guitar picks 5</td>
+			<td id="s2g5">5</td>
+		</tr>
+		<tr class="s3">
+			<td>Tutorials</td>
+			<td id="s2tuts">Coming soon?</td>
 		</tr>
 	</table>
 	<p>Created by Ethan Chapman</p>
