@@ -23,12 +23,116 @@
 	}
 	</style>
 	<script>
+	var arr = [];
+	const NIBBLE_LOOKUP = [0,1,1,2,1,2,2,3,1,2,2,3,2,3,3,4];
+	function toHexStr(st, end) {
+		var o = "";
+		for(var i = st; i <= end; i++) {
+			o+=arr[i].toString(16).padStart(2,"0");
+		}
+		return o.toUpperCase();
+	}
+	function toDecStr(st, end) {//Doesn't actually return a string, can't be bothered to fix name
+		var o = "";
+		for(var i = end; i >= st; i--) {
+			o+=arr[i];
+		}
+		return parseInt(o);
+	}
 	function parseFile() {
 		var reader = new FileReader();
 		reader.readAsArrayBuffer(document.getElementById("save-input").files[0]);
 		reader.onloadend = function() {
-			var arr = new Uint8Array(reader.result, 0, 235);
+			arr = new Uint8Array(reader.result, 0, 235);
 			console.log(arr);
+			
+			//Detect actually started saves
+			var st1,st2,st3 = false;
+			for(i = 76; i <= 119; i++) {
+				if(arr[i] != 0) {st1 = true;}
+			}
+			for(i = 124; i <= 167; i++) {
+				if(arr[i] != 0) {st2 = true;}
+			}
+			for(i = 172; i <= 215; i++) {
+				if(arr[i] != 0) {st3 = true;}
+			}
+			
+			//Reset data
+			var tds = document.getElementsByTagName("td");
+			for(i = 0; i < tds.length; i++) {
+				if(["","s1tuts","s2tuts","s3tuts"].indexOf(tds[i].id) < 0) {
+					tds[i].textContent = "";
+				}
+			}
+			
+			//Get implied started saves
+			var t = "";
+			for(i = 2; i < 5; i++) {
+				if((arr[8]>>i)%2) {
+					t += (t.length ? ","+(i-1) : i-1);
+				}
+			}
+			document.getElementById("started").textContent = t;
+			document.getElementById("settings").textContent = (arr[8]>>1)%2 ? "Yes" : "No";
+			document.getElementById("header").textContent = toHexStr(0,4);
+			document.getElementById("ucheck").textContent = toHexStr(16,23);
+			document.getElementById("gcheck").textContent = toHexStr(72,75);
+			document.getElementById("1check").textContent = toHexStr(120,123);
+			document.getElementById("2check").textContent = toHexStr(168,171);
+			document.getElementById("3check").textContent = toHexStr(216,219)
+			document.getElementById("jklevels").textContent = arr[70];
+			document.getElementById("jkupgrades").textContent = NIBBLE_LOOKUP[arr[68]&15]+NIBBLE_LOOKUP[arr[68]>>4]+NIBBLE_LOOKUP[arr[69]&15]+NIBBLE_LOOKUP[arr[69]>>4]
+			document.getElementById("lang").textContent = arr[66]==1 ? "French" : "English";
+			document.getElementById("hand").textContent = arr[67]==1 ? "Left" : "Right";
+			document.getElementById("music").textContent = arr[64]>3 ? "Off" : ["Off","Low","Medium","High"][arr[64]];
+			document.getElementById("sfx").textContent = arr[64]>3 ? "Off" : ["Off","Low","Medium","High"][arr[65]];
+			document.getElementById("g1n").textContent = arr[24]+256*arr[25]+65536*arr[26]+16777216*arr[27];
+			document.getElementById("g1h").textContent = arr[28]+256*arr[29]+65536*arr[30]+16777216*arr[31];
+			document.getElementById("g2n").textContent = arr[32]+256*arr[33]+65536*arr[34]+16777216*arr[35];
+			document.getElementById("g2h").textContent = arr[36]+256*arr[37]+65536*arr[38]+16777216*arr[39];
+			document.getElementById("g3n").textContent = arr[40]+256*arr[41]+65536*arr[42]+16777216*arr[43];
+			document.getElementById("g3h").textContent = arr[44]+256*arr[45]+65536*arr[46]+16777216*arr[47];
+			document.getElementById("g4n").textContent = arr[48]+256*arr[49]+65536*arr[50]+16777216*arr[51];
+			document.getElementById("g4h").textContent = arr[52]+256*arr[53]+65536*arr[54]+16777216*arr[55];
+			document.getElementById("g5n").textContent = arr[56]+256*arr[57]+65536*arr[58]+16777216*arr[59];
+			document.getElementById("g5h").textContent = arr[60]+256*arr[61]+65536*arr[62]+16777216*arr[63];
+			
+			if(st1) {
+				document.getElementById("s1time").textContent = toDecStr(80,83)+"/"+toDecStr(84,87)+"/"+(25-toDecStr(88,91))+toDecStr(76,79).toString().padStart(2,"0")+" "+toDecStr(92,95)+":"+toDecStr(96,99).toString().padStart(2,"0")+":"+toDecStr(100,103).toString().padStart(2,"0");
+				document.getElementById("s1level").textContent = toDecStr(104,107) > 35 ? "Unknown" : ["1-1","1-2","1-3","1-4","2-1","2-2","2-3","2-4","3-1","3-2","3-3","4-1","5-1","6-1","6-2","7-1","7-2","8-1","8-2","9-1","9-2","10-1","10-2","11-1","11-2","11-3","12-1","12-2","12-3","13-1","End","Guitar 1","Guitar 2","Guitar 3","Guitar 4","Guitar 5","Dev level"][toDecStr(104,107)];
+				document.getElementById("s1g1").textContent = arr[114];
+				document.getElementById("s1g2").textContent = arr[115];
+				document.getElementById("s1g3").textContent = arr[116];
+				document.getElementById("s1g4").textContent = arr[117];
+				document.getElementById("s1g5").textContent = arr[118];
+				document.getElementById("s1trophies").textContent = arr[112];
+				document.getElementById("s1am").textContent = arr[113];
+			}
+			
+			if(st2) {
+				document.getElementById("s2time").textContent = toDecStr(128,131)+"/"+toDecStr(132,135)+"/"+(25-toDecStr(136,139))+toDecStr(124,127).toString().padStart(2,"0")+" "+toDecStr(140,143)+":"+toDecStr(144,147).toString().padStart(2,"0")+":"+toDecStr(148,151).toString().padStart(2,"0");
+				document.getElementById("s2level").textContent = toDecStr(152,155) > 35 ? "Unknown" : ["1-1","1-2","1-3","1-4","2-1","2-2","2-3","2-4","3-1","3-2","3-3","4-1","5-1","6-1","6-2","7-1","7-2","8-1","8-2","9-1","9-2","10-1","10-2","11-1","11-2","11-3","12-1","12-2","12-3","13-1","End","Guitar 1","Guitar 2","Guitar 3","Guitar 4","Guitar 5","Dev level"][toDecStr(152,155)];
+				document.getElementById("s2g1").textContent = arr[162];
+				document.getElementById("s2g2").textContent = arr[163];
+				document.getElementById("s2g3").textContent = arr[164];
+				document.getElementById("s2g4").textContent = arr[165];
+				document.getElementById("s2g5").textContent = arr[166];
+				document.getElementById("s2trophies").textContent = arr[160];
+				document.getElementById("s2am").textContent = arr[161];
+			}
+			
+			if(st3) {
+				document.getElementById("s3time").textContent = toDecStr(176,179)+"/"+toDecStr(180,183)+"/"+(25-toDecStr(184,187))+toDecStr(172,175).toString().padStart(2,"0")+" "+toDecStr(188,191)+":"+toDecStr(192,195).toString().padStart(2,"0")+":"+toDecStr(196,199).toString().padStart(2,"0");
+				document.getElementById("s3level").textContent = toDecStr(200,203) > 35 ? "Unknown" : ["1-1","1-2","1-3","1-4","2-1","2-2","2-3","2-4","3-1","3-2","3-3","4-1","5-1","6-1","6-2","7-1","7-2","8-1","8-2","9-1","9-2","10-1","10-2","11-1","11-2","11-3","12-1","12-2","12-3","13-1","End","Guitar 1","Guitar 2","Guitar 3","Guitar 4","Guitar 5","Dev level"][toDecStr(200,203)];
+				document.getElementById("s3g1").textContent = arr[210];
+				document.getElementById("s3g2").textContent = arr[211];
+				document.getElementById("s3g3").textContent = arr[212];
+				document.getElementById("s3g4").textContent = arr[213];
+				document.getElementById("s3g5").textContent = arr[214];
+				document.getElementById("s3trophies").textContent = arr[208];
+				document.getElementById("s3am").textContent = arr[209];
+			}
 		}
 	}
 	var coll = {"m":false,"g":false,"s1":false,"s2":false,"s3":false};
@@ -54,141 +158,141 @@
 		</tr>
 		<tr class="m">
 			<td>Header</td>
-			<td id="header">85EC93370C</td>
+			<td id="header"></td>
 		</tr>
 		<tr class="m">
 			<td>Saves started</td>
-			<td id="started">1,2,3</td>
+			<td id="started"></td>
 		</tr>
 		<tr class="m">
 			<td>Settings menu opened?</td>
-			<td id="settings">no</td>
+			<td id="settings"></td>
 		</tr>
 		<tr class="m">
 			<td>Universal checksum</td>
-			<td id="ucheck">CF7B45F382201F2D</td>
+			<td id="ucheck"></td>
 		</tr>
 		<tr class="m">
 			<td>Global checksum</td>
-			<td id="gcheck">9F231BD9</td>
+			<td id="gcheck"></td>
 		</tr>
 		<tr class="m">
 			<td>Save 1 checksum</td>
-			<td id="1check">5ED1064C</td>
+			<td id="1check"></td>
 		</tr>
 		<tr class="m">
 			<td>Save 2 checksum</td>
-			<td id="2check">5ED1064C</td>
+			<td id="2check"></td>
 		</tr>
 		<tr class="m">
 			<td>Save 3 checksum</td>
-			<td id="3check">5ED1064C</td>
+			<td id="3check"></td>
 		</tr>
 		<tr>
 			<th colspan=2 onclick="collapse('g')" id="g">Global ▼</th>
 		</tr>
 		<tr class="g">
 			<td>Joshakazam levels completed</td>
-			<td id="jklevels">80</td>
+			<td id="jklevels"></td>
 		</tr>
 		<tr class="g">
 			<td>Joshakazam upgrades</td>
-			<td id="jkupgrades">12</td>
+			<td id="jkupgrades"></td>
 		</tr>
 		<tr class="g">
 			<td>Handedness</td>
-			<td id="hand">Right</td>
+			<td id="hand"></td>
 		</tr>
 		<tr class="g">
 			<td>Language</td>
-			<td id="lang">English</td>
+			<td id="lang"></td>
 		</tr>
 		<tr class="g">
 			<td>Music level</td>
-			<td id="music">Medium</td>
+			<td id="music"></td>
 		</tr>
 		<tr class="g">
 			<td>SFX level</td>
-			<td id="sfx">Medium</td>
+			<td id="sfx"></td>
 		</tr>
 		<tr class="g">
 			<td>Guitar 1 normal high score</td>
-			<td id="g1n">100000</td>
+			<td id="g1n"></td>
 		</tr>
 		<tr class="g">
 			<td>Guitar 1 hard high score</td>
-			<td id="g1h">100000</td>
+			<td id="g1h"></td>
 		</tr>
 		<tr class="g">
 			<td>Guitar 2 normal high score</td>
-			<td id="g2n">100000</td>
+			<td id="g2n"></td>
 		</tr>
 		<tr class="g">
 			<td>Guitar 2 hard high score</td>
-			<td id="g2h">100000</td>
+			<td id="g2h"></td>
 		</tr>
 		<tr class="g">
 			<td>Guitar 3 normal high score</td>
-			<td id="g3n">100000</td>
+			<td id="g3n"></td>
 		</tr>
 		<tr class="g">
 			<td>Guitar 3 hard high score</td>
-			<td id="g3h">100000</td>
+			<td id="g3h"></td>
 		</tr>
 		<tr class="g">
 			<td>Guitar 4 normal high score</td>
-			<td id="g4n">100000</td>
+			<td id="g4n"></td>
 		</tr>
 		<tr class="g">
 			<td>Guitar 4 hard high score</td>
-			<td id="g4h">100000</td>
+			<td id="g4h"></td>
 		</tr>
 		<tr class="g">
 			<td>Guitar 5 normal high score</td>
-			<td id="g5n">100000</td>
+			<td id="g5n"></td>
 		</tr>
 		<tr class="g">
 			<td>Guitar 5 hard high score</td>
-			<td id="g5h">100000</td>
+			<td id="g5h"></td>
 		</tr>
 		<tr>
 			<th colspan=2 onclick="collapse('s1')" id="s1">Save 1 ▼</th>
 		</tr>
 		<tr class="s1">
 			<td>Save datetime</td>
-			<td id="s1time">16:05:12 4/20/2019</td>
+			<td id="s1time"></td>
 		</tr>
 		<tr class="s1">
 			<td>Level</td>
-			<td id="s1level">1-3</td>
+			<td id="s1level"></td>
 		</tr>
 		<tr class="s1">
 			<td>Trophies</td>
-			<td id="s1trophies">12</td>
+			<td id="s1trophies"></td>
 		</tr>
 		<tr class="s1">
 			<td>Action meter upgrades</td>
-			<td id="s1am">1</td>
+			<td id="s1am"></td>
 		</tr>
 		<tr class="s1">
 			<td>Guitar picks 1</td>
-			<td id="s1g1">5</td>
+			<td id="s1g1"></td>
 		</tr>
 		<tr class="s1">
 			<td>Guitar picks 2</td>
-			<td id="s1g2">5</td>
+			<td id="s1g2"></td>
 		</tr>
 		<tr class="s1">
 			<td>Guitar picks 3</td>
-			<td id="s1g3">5</td>
+			<td id="s1g3"></td>
 		</tr>
 		<tr class="s1">
 			<td>Guitar picks 4</td>
-			<td id="s1g4">5</td>
+			<td id="s1g4"></td>
 		</tr>
 		<tr class="s1">
 			<td>Guitar picks 5</td>
-			<td id="s1g5">5</td>
+			<td id="s1g5"></td>
 		</tr>
 		<tr class="s1">
 			<td>Tutorials</td>
@@ -199,39 +303,39 @@
 		</tr>
 		<tr class="s2">
 			<td>Save datetime</td>
-			<td id="s2time">16:05:12 4/20/2019</td>
+			<td id="s2time"></td>
 		</tr>
 		<tr class="s2">
 			<td>Level</td>
-			<td id="s2level">1-3</td>
+			<td id="s2level"></td>
 		</tr>
 		<tr class="s2">
 			<td>Trophies</td>
-			<td id="s2trophies">12</td>
+			<td id="s2trophies"></td>
 		</tr>
 		<tr class="s2">
 			<td>Action meter upgrades</td>
-			<td id="s2am">1</td>
+			<td id="s2am"></td>
 		</tr>
 		<tr class="s2">
 			<td>Guitar picks 1</td>
-			<td id="s2g1">5</td>
+			<td id="s2g1"></td>
 		</tr>
 		<tr class="s2">
 			<td>Guitar picks 2</td>
-			<td id="s2g2">5</td>
+			<td id="s2g2"></td>
 		</tr>
 		<tr class="s2">
 			<td>Guitar picks 3</td>
-			<td id="s2g3">5</td>
+			<td id="s2g3"></td>
 		</tr>
 		<tr class="s2">
 			<td>Guitar picks 4</td>
-			<td id="s2g4">5</td>
+			<td id="s2g4"></td>
 		</tr>
 		<tr class="s2">
 			<td>Guitar picks 5</td>
-			<td id="s2g5">5</td>
+			<td id="s2g5"></td>
 		</tr>
 		<tr class="s2">
 			<td>Tutorials</td>
@@ -242,39 +346,39 @@
 		</tr>
 		<tr class="s3">
 			<td>Save datetime</td>
-			<td id="s3time">16:05:12 4/20/2019</td>
+			<td id="s3time"></td>
 		</tr>
 		<tr class="s3">
 			<td>Level</td>
-			<td id="s3level">1-3</td>
+			<td id="s3level"></td>
 		</tr>
 		<tr class="s3">
 			<td>Trophies</td>
-			<td id="s3trophies">12</td>
+			<td id="s3trophies"></td>
 		</tr>
 		<tr class="s3">
 			<td>Action meter upgrades</td>
-			<td id="s3am">1</td>
+			<td id="s3am"></td>
 		</tr>
 		<tr class="s3">
 			<td>Guitar picks 1</td>
-			<td id="s3g1">5</td>
+			<td id="s3g1"></td>
 		</tr>
 		<tr class="s3">
 			<td>Guitar picks 2</td>
-			<td id="s3g2">5</td>
+			<td id="s3g2"></td>
 		</tr>
 		<tr class="s3">
 			<td>Guitar picks 3</td>
-			<td id="s3g3">5</td>
+			<td id="s3g3"></td>
 		</tr>
 		<tr class="s3">
 			<td>Guitar picks 4</td>
-			<td id="s3g4">5</td>
+			<td id="s3g4"></td>
 		</tr>
 		<tr class="s3">
 			<td>Guitar picks 5</td>
-			<td id="s3g5">5</td>
+			<td id="s3g5"></td>
 		</tr>
 		<tr class="s3">
 			<td>Tutorials</td>
