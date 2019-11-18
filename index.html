@@ -3,6 +3,7 @@
 <head>
 	<title>DJTS Save Analyzer</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="Description" content="Drake & Josh: Talent Showdown save file analyzer">
 	<style>
 	#main {
 		max-width: 400px;
@@ -151,7 +152,7 @@
 <body>
 <div id="main">
 	<h2>DJTS Save Analyzer</h2>
-	<p>Choose save file: <input id="save-input" type="file" accept=".SAV, .dsv" oninput="parseFile()"/></p>
+	<label for="save-input">Choose save file: <input id="save-input" type="file" accept=".SAV, .dsv" oninput="parseFile()"/></label>
 	<table style="width:100%">
 		<tr>
 			<th colspan=2 onclick="collapse('m')" id="m">Metadata ▼</th>
