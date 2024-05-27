@@ -1,5 +1,5 @@
 # DJTS-Saves
-Save data analysis for the THQ DS game Drake &amp; Josh: Talent Showdown, viewable [here](https://eiim.github.io/DJTS-Saves/).
+Save data analysis for the THQ DS game Drake &amp; Josh: Talent Showdown, viewable [here](https://djts-saves.eiim.page/).
 ## What is this?
 This tool analyzes raw .SAV or .dsv save files for Drake &amp; Josh: Talent Showdown.
 
